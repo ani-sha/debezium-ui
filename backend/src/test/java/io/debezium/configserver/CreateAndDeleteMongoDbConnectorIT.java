@@ -60,6 +60,8 @@ public class CreateAndDeleteMongoDbConnectorIT {
             .assertThat().body("name", equalTo("my-mongodb-connector"))
             .and().rootPath("config")
                 .body("['connector.class']", equalTo("io.debezium.connector.mongodb.MongoDbConnector"))
+                .and().body("[mongodb.connection.string]", equalTo("mongodb://" + mongoDbContainer.getContainerInfo().getConfig().getHostName()
+                    + ":" + mongoDbContainer.getExposedPorts().get(0)))
                 .and().body("['mongodb.hosts']",
                 equalTo("rs0/"+ mongoDbContainer.getContainerInfo().getConfig().getHostName()
                     + ":" + mongoDbContainer.getExposedPorts().get(0)));

@@ -41,7 +41,7 @@ public class Infrastructure {
         POSTGRES, MYSQL, SQLSERVER, MONGODB, ORACLE, NONE
     }
 
-    private static final String DEBEZIUM_CONTAINER_VERSION = "2.0";
+    private static final String DEBEZIUM_CONTAINER_VERSION = "2.2";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Infrastructure.class);
 
@@ -66,7 +66,7 @@ public class Infrastructure {
                     .withNetworkAliases("mysql");
 
     private static final MongoDBContainer MONGODB_CONTAINER =
-            new MongoDbContainer(DockerImageName.parse("mongo:3.6"))
+            new MongoDbContainer(DockerImageName.parse("quay.io/debezium/example-mongodb:" + DEBEZIUM_CONTAINER_VERSION).asCompatibleSubstituteFor("mongo"))
                     .withNetwork(NETWORK)
                     .withNetworkAliases("mongodb");
 
@@ -200,6 +200,7 @@ public class Infrastructure {
     public static ConnectorConfiguration getMongoDbConnectorConfiguration(int id, String... options) {
         final ConnectorConfiguration config = ConnectorConfiguration.forMongoDbContainer(MONGODB_CONTAINER)
                 .with("snapshot.mode", "never") // temporarily disable snapshot mode globally until we can check if connectors inside testcontainers are in SNAPSHOT or STREAMING mode (wait for snapshot finished!)
+                .with(MongoDbConnectorConfig.CONNECTION_STRING.name(), "mongodb://localhost:27017")
                 .with(MongoDbConnectorConfig.USER.name(), "debezium")
                 .with(MongoDbConnectorConfig.PASSWORD.name(), "dbz")
                 .with(MongoDbConnectorConfig.TOPIC_PREFIX.name(), "mongo" + id);

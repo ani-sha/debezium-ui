@@ -31,7 +31,8 @@ public class ValidateMongoDbFiltersIT {
     public void testEmptyMongoDbFilters() {
         ObjectNode config = ConnectorConfigurationTestingHelper.getConfig(
             Infrastructure.getMongoDbConnectorConfiguration(1)
-                .with(MongoDbConnectorConfig.HOSTS.name(), "rs0/localhost:" + Infrastructure.getMongoDbContainer().getMappedPort(27017))
+                .with(MongoDbConnectorConfig.CONNECTION_STRING.name(),
+                        "mongodb://localhost:" + Infrastructure.getMongoDbContainer().getExposedPorts().get(0))
         );
 
         given().when().contentType(ContentType.JSON).accept(ContentType.JSON).body(config.toString())
@@ -53,7 +54,8 @@ public class ValidateMongoDbFiltersIT {
     public void testValidTableIncludeList() {
         ObjectNode config = ConnectorConfigurationTestingHelper.getConfig(
                 Infrastructure.getMongoDbConnectorConfiguration(1)
-                        .with(MongoDbConnectorConfig.HOSTS.name(), "rs0/localhost:" + Infrastructure.getMongoDbContainer().getMappedPort(27017))
+                        .with(MongoDbConnectorConfig.CONNECTION_STRING.name(),
+                                "mongodb://localhost:" + Infrastructure.getMongoDbContainer().getExposedPorts().get(0))
                         .with(MongoDbConnectorConfig.COLLECTION_INCLUDE_LIST.name(), "inventory\\.product.*")
         );
 
@@ -74,7 +76,8 @@ public class ValidateMongoDbFiltersIT {
     public void testValidDatabaseIncludeList() {
         ObjectNode config = ConnectorConfigurationTestingHelper.getConfig(
                 Infrastructure.getMongoDbConnectorConfiguration(1)
-                        .with(MongoDbConnectorConfig.HOSTS.name(), "rs0/localhost:" + Infrastructure.getMongoDbContainer().getMappedPort(27017))
+                        .with(MongoDbConnectorConfig.CONNECTION_STRING.name(),
+                                "mongodb://localhost:" + Infrastructure.getMongoDbContainer().getExposedPorts().get(0))
                         .with(MongoDbConnectorConfig.DATABASE_INCLUDE_LIST.name(), "inventory")
         );
 
@@ -97,7 +100,8 @@ public class ValidateMongoDbFiltersIT {
     public void testDatabaseIncludeListPatternInvalid() {
         ObjectNode config = ConnectorConfigurationTestingHelper.getConfig(
                 Infrastructure.getMongoDbConnectorConfiguration(1)
-                        .with(MongoDbConnectorConfig.HOSTS.name(), "rs0/localhost:" + Infrastructure.getMongoDbContainer().getMappedPort(27017))
+                        .with(MongoDbConnectorConfig.CONNECTION_STRING.name(),
+                                "mongodb://localhost:" + Infrastructure.getMongoDbContainer().getExposedPorts().get(0))
                         .with(MongoDbConnectorConfig.DATABASE_INCLUDE_LIST.name(), "+")
         );
 
@@ -117,7 +121,8 @@ public class ValidateMongoDbFiltersIT {
     public void testDatabaseExcludeListPatternInvalid() {
         ObjectNode config = ConnectorConfigurationTestingHelper.getConfig(
                 Infrastructure.getMongoDbConnectorConfiguration(1)
-                        .with(MongoDbConnectorConfig.HOSTS.name(), "rs0/localhost:" + Infrastructure.getMongoDbContainer().getMappedPort(27017))
+                        .with(MongoDbConnectorConfig.CONNECTION_STRING.name(),
+                                "mongodb://localhost:" + Infrastructure.getMongoDbContainer().getExposedPorts().get(0))
                         .with(MongoDbConnectorConfig.DATABASE_EXCLUDE_LIST.name(), "+")
         );
 
